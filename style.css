@@ -27,3 +27,38 @@ body{
    grid-template-columns: 10% 80% 10%;
    grid-template-rows: 40% 60%;
 }
+.show{
+    margin: 10% 0 0 0;
+  display: grid;
+  grid-column: 2/3;
+  grid-row: 1/2;
+  background-color: var(--show-color);
+  height: 60%;
+  border-radius: 25px;
+  text-align: center;
+  font-size: x-large;
+  grid-template-rows: 50% 50%;
+}
+
+.tecleado{
+    display: grid;
+    grid-column: 2/3;
+    grid-row: 2/3;
+    grid-template-columns: repeat(5,20%);
+    grid-template-rows: repeat(4,22%) 10%;
+}
+.tecleado-boton,.entrada-datos,.salida-datos{
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+}
+.tecleado-boton{
+    height: 70%;
+    width: 70%;
+    border-radius: 25%;
+}
+.entrada-datos,.salida-datos{
+  height: 50%;
+}
