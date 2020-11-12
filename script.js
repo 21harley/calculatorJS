@@ -6,71 +6,145 @@ const numeros=["0","1","2","3","4","5","6","7","8","9"];
 let cont=0;
 
 function suma(a="",b=""){
-
+  let res=parseFloat(a)+parseFloat(b);
+  return ""+res;
 }
 
 function  resta(a="",b=""){
-
+  let res=parseFloat(a)-parseFloat(b);
+  return ""+res;
 }
 
 function  multiplicacion(a="",b=""){
-   
   let res=parseFloat(a)*parseFloat(b);
-  
-  return new String(res);
+  return ""+res;
 }
 
 function divicion(a="",b=""){
   let res=parseFloat(a)/parseFloat(b);
-  
-  return new String(res);
-}
-function tipo(cadena=""){
-  let res="";
-   for(let i=0;i<cadena.length;i++){
-     if(cadena[i]==operadores[2]||cadena[i]==operadores[3]){
-        if(cadena[i]==operadores[2]){
-          res=multiplicacion(cadena[i-1],cadena[i+1]);
-        }
-        if(cadena[i]==operadores[3]){
-          res=divicion(cadena[i-1],cadena[i+1]);
-        }
-        console.log(cadena.length+" "+(i+2));
-        if(i+2<cadena.length){
-          for(let j=i+2;j<cadena.length;j++){
-            res+=cadena[j];
-          }
-        }
-        tipo(res);
-        console.log(res);
-        break;
-     }
-   }
+  return ""+res;
 }
 
-function partirP(cadena=""){
-   let aux1="";
-   let aux2="";
-   let cont=0;
-   let aux=0; 
+function resultado(obj){
+   while(obj.length!=1){
+    for(let i=0;i<obj.length;i++){
+      if(obj[i]==operadores[2]||obj[i]==operadores[3]){
+        let res;
+        if(obj[i]==operadores[2]){
+          res=multiplicacion(obj[i-1],obj[i+1]);
+        }else{
+          res=divicion(obj[i-1],obj[i+1])
+        }
+        obj.splice(i-1,2);
+        obj[i-1]=res;
+      }          
+    }
+    for(let i=0;i<obj.length;i++){
+      if(obj[i]==operadores[0]||obj[i]==operadores[1]){
+        let res;
+        if(obj[i]==operadores[0]){
+          res=suma(obj[i-1],obj[i+1]);
+        }else{
+          res=resta(obj[i-1],obj[i+1])
+        }
+        obj.splice(i-1,2);
+        obj[i-1]=res;
+      }
+    }
+   }
+  
+   return obj[0];
+}
+
+function agruparSinParentesis(cadena=""){
+  let res="";
+  let array=[];
+   for(let i=0;i<cadena.length;i++){
+     if(cadena[i]==operadores[0]||cadena[i]==operadores[1]||cadena[i]==operadores[2]||cadena[i]==operadores[3]){
+       if(res.length>0){
+        array.push(res);
+        res="";
+        }
+        array.push(cadena[i]);
+        res="";
+     }else{
+      res+=cadena[i];
+     }
+   }
+   if(res.length>0){
+    array.push(res);
+    res="";
+   }
+   return array;
+}
+
+function parentesis(cadena=""){
+  for(let i=1;i<cadena.length;i++){
+     if(cadena[i]==operadores[5]){
+       let contp=1;let res1=""; let inc=1;
+       while(contp!=0){
+         res1+=cadena[i+inc];inc++;
+        if(cadena[i+inc]==operadores[5]){
+            contp++;
+        }else if(cadena[i+inc]==operadores[6]){
+            contp--;
+        } 
+      }
+      parentesis(res1);
+    }
+  }
+  let aux="";
   for(let i=0;i<cadena.length;i++){
-      if(cadena[i]==operadores[5]){
-        aux++;cont++;
-        do{
-          aux1+=cadena[i+aux];
-          if(operadores[5]==cadena[i+aux+1]){
-            cont++;
-          }else if(operadores[6]==cadena[i+aux+1]){
-            cont--;
-          }
-          aux++;
-        }while(cont!=0);
-        console.log(aux1);
-        aux2=partirP(cadena);
-        break;
+      if(cadena[i]!=operadores[5]&&cadena[i]!=operadores[6]){
+        aux+=cadena[i];
       }
   }
-  return aux1;
+  return resultado(agruparSinParentesis(aux));  
+}
+
+function agrupar(cadena=""){
+  let res="";
+  let array=[];
+   for(let i=0;i<cadena.length;i++){
+     if(cadena[i]==operadores[0]||cadena[i]==operadores[1]||cadena[i]==operadores[2]||cadena[i]==operadores[3]){
+       if(res.length>0){
+        array.push(res);
+        res="";
+        }
+        array.push(cadena[i]);
+        res="";
+     }else if(cadena[i]==operadores[5]){
+      if(res.length>0){
+        array.push(res);
+        array.push("*");
+        res="";
+      }
+       let contp=1;let res1=cadena[i]; let inc=1;
+       while(contp!=0){
+         res1+=cadena[i+inc];
+        if(cadena[i+inc]==operadores[5]){
+            contp++;
+        }else if(cadena[i+inc]==operadores[6]){
+            contp--;
+        }
+        inc++;
+      }
+      array.push(res1);
+      i=i+inc-1;     
+     }else{
+      res+=cadena[i];
+     }
+   }
+   if(res.length>0){
+    array.push(res);
+    res="";
+   }
+   for(let i=0;i<array.length;i++){
+    if(array[i][0]==operadores[5]){
+      array[i]=parentesis(array[i]);
+    }
+   }
+   return resultado(array);
 }
 
 function validarCadena(cadena=""){
@@ -83,7 +157,7 @@ function validarCadena(cadena=""){
    }
    if(cont==0){
      if(cadena[0]!=operadores[1]&&cadena[0]!=operadores[5]){
-      console.log("Error de al inicio"); return 0;
+      console.log("Error de al inicio"); return "Syntax Error";
      }
    }
    cont=0;
@@ -92,11 +166,11 @@ function validarCadena(cadena=""){
      for(let j=0;j<5;j++){
        if(cadena[i]==operadores[j]&&i<cadena.length-1){
            if(cadena[i+1]==operadores[j]){
-             console.log("Error repitio un operador"); return 0;
+             console.log("Error repitio un operador"); return "Syntax Error";
            }
            for(let k=0;k<5;k++){
              if(cadena[i+1]==operadores[k]&&k!=j){
-               console.log("Ingreso dos operadores continuos"); return 0;
+               console.log("Ingreso dos operadores continuos"); return "Syntax Error";
              }
            }
        }
@@ -112,7 +186,7 @@ function validarCadena(cadena=""){
    }
    if(cont!=0){
      console.log("un parentecis no se cerro");
-     return 0;
+     return "Syntax Error";
    }
    cont=0;
   
@@ -122,14 +196,25 @@ function validarCadena(cadena=""){
       cont++; break;
     }
   }
+  for(let i=0;i<cadena.length;i++){
+    if(cadena[i]==operadores[6]){
+      if((i+1)<cadena.length){
+        for(let j=0;j<numeros.length;j++){
+          if(cadena[i+1]==numeros[j]){
+            console.log("Error el corchete de cierre tiene acompañante");
+            return "Syntax Error"; 
+          }
+        }
+      }
+    }
+  }
   if(cont==0){
     if(cadena[cadena.length-1]!=operadores[6]){
-     console.log("Error de al final"); return 0;
+     console.log("Error de al final"); return "Syntax Error";
     }
   }
   cont=0;
-   partir(cadena);
-   return 1;
+  return agrupar(cadena);
 }
 
 $d.addEventListener("click",(e)=>{
@@ -140,6 +225,7 @@ $d.addEventListener("click",(e)=>{
      &&$etiqueta.id!="del"
      &&cont<20){
      $consola.innerHTML+=$etiqueta.innerHTML;cont++;
+     $salida.innerHTML="";
    }
    if($etiqueta.id=="elim"){
     let aux=$consola.innerHTML;
@@ -148,14 +234,14 @@ $d.addEventListener("click",(e)=>{
     for(let i=0;i<aux.length-1;i++){
       aux1+=aux[i];
     }
-    $consola.innerHTML=aux1;
+    $consola.innerHTML=aux1;cont--;
    }
    if($etiqueta.id=="del"){
      $consola.innerHTML="";
-     $salida.innerHTML="";
+     $salida.innerHTML="";cont=0;
    }
    if($etiqueta.id=="igual"){
-     //console.log(validarCadena($consola.innerHTML));
-     tipo($consola.innerHTML);
+     $salida.innerHTML="";
+     $salida.innerHTML=validarCadena($consola.innerHTML);
    }
 });
