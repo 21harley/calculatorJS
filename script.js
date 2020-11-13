@@ -39,16 +39,19 @@ function resultado(obj){
         obj[i-1]=res;
       }          
     }
-    for(let i=0;i<obj.length;i++){
-      if(obj[i]==operadores[0]||obj[i]==operadores[1]){
-        let res;
-        if(obj[i]==operadores[0]){
-          res=suma(obj[i-1],obj[i+1]);
-        }else{
-          res=resta(obj[i-1],obj[i+1])
+    console.log(obj);
+    if(obj.length>1){
+      for(let i=0;i<obj.length;i++){
+        if(obj[i]==operadores[0]||obj[i]==operadores[1]){
+          let res;
+          if(obj[i]==operadores[0]){
+            res=suma(obj[i-1],obj[i+1]);
+          }else{
+            res=resta(obj[i-1],obj[i+1])
+          }
+          obj.splice(i-1,2);
+          obj[i-1]=res;
         }
-        obj.splice(i-1,2);
-        obj[i-1]=res;
       }
     }
    }
@@ -75,10 +78,14 @@ function agruparSinParentesis(cadena=""){
     array.push(res);
     res="";
    }
+   console.log(array);
    return array;
 }
 
 function parentesis(cadena=""){
+  let rot="";
+  let salto=0;
+  let pos=0;
   for(let i=1;i<cadena.length;i++){
      if(cadena[i]==operadores[5]){
        let contp=1;let res1=""; let inc=1;
@@ -90,15 +97,36 @@ function parentesis(cadena=""){
             contp--;
         } 
       }
-      parentesis(res1);
+      rot=parentesis(res1);
+      salto=inc;
+      pos=i;
+      i=i+inc;
     }
   }
   let aux="";
-  for(let i=0;i<cadena.length;i++){
+  if(rot.length==0){
+    for(let i=0;i<cadena.length;i++){
+        if(cadena[i]!=operadores[5]&&cadena[i]!=operadores[6]){
+          aux+=cadena[i];
+        }
+    }
+  }else{
+    for(let i=0;i<cadena.length;i++){
       if(cadena[i]!=operadores[5]&&cadena[i]!=operadores[6]){
         aux+=cadena[i];
+      }else if(i==pos){
+        for(let j=0;j<numeros.length;j++){
+          if(cadena[i-1]==numeros[j]){
+            aux+="*"; break;
+          }
+        }
+        aux+=rot;
+        i=i+salto;
       }
+    }
   }
+
+  console.log(aux);
   return resultado(agruparSinParentesis(aux));  
 }
 
@@ -139,11 +167,13 @@ function agrupar(cadena=""){
     array.push(res);
     res="";
    }
+   console.log(array);
    for(let i=0;i<array.length;i++){
     if(array[i][0]==operadores[5]){
       array[i]=parentesis(array[i]);
     }
    }
+  
    return resultado(array);
 }
 
