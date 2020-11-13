@@ -2,8 +2,11 @@
     --body-color:#d9e4dd;
     --container-color:#555555;
     --show-color:#fbf7f0;
-    --buttom-color:#323232;
+    --buttom-color:#0f3460;
+    --buttom-color-shadow:#16213e;
     --box-color:#646464;
+    --container-color-one:#e94560;
+    --container-color-two:#1a1a2e;
 }
 
 body{
@@ -18,7 +21,7 @@ body{
 }
 
 .container{
-   background-color: var(--container-color);
+    background: linear-gradient(to bottom, var(--container-color-one) ,var(--container-color-two));
    width: 40%;
    height: 80%;
    border-radius: 50px;
@@ -32,7 +35,7 @@ body{
   display: grid;
   grid-column: 2/3;
   grid-row: 1/2;
-  background-color: var(--show-color);
+ background-color: var(--body-color);
   height: 60%;
   border-radius: 25px;
   text-align: center;
@@ -58,7 +61,29 @@ body{
     height: 70%;
     width: 70%;
     border-radius: 25%;
+    font-family: OpenSans;
+    color:var(--body-color);
+    background-color: var(--buttom-color);
+    border: 1px solid  var(--buttom-color);
+    box-shadow: 0px 5px 0px var(--buttom-color-shadow);
+    position: relative;
+    top: 0px;
+    transition: all ease 0.3s;
 }
+
+.tecleado-boton:active{
+    box-shadow: 0 3px 0 var(--buttom-color-shadow);
+    top: 3px;
+}
+
 .entrada-datos,.salida-datos{
+  font-family: 'Press Start 2P', cursive;
+  font-size: 60%;
   height: 50%;
+}
+
+@media only screen and (max-width: 900px){
+    body{
+        width: 900px;
+    }
 }

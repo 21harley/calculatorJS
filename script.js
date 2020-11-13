@@ -78,7 +78,6 @@ function agruparSinParentesis(cadena=""){
     array.push(res);
     res="";
    }
-   console.log(array);
    return array;
 }
 
@@ -125,8 +124,6 @@ function parentesis(cadena=""){
       }
     }
   }
-
-  console.log(aux);
   return resultado(agruparSinParentesis(aux));  
 }
 
@@ -167,7 +164,6 @@ function agrupar(cadena=""){
     array.push(res);
     res="";
    }
-   console.log(array);
    for(let i=0;i<array.length;i++){
     if(array[i][0]==operadores[5]){
       array[i]=parentesis(array[i]);
