@@ -26,6 +26,7 @@ function divicion(a="",b=""){
 }
 
 function resultado(obj){
+  let aux=0;
    while(obj.length!=1){
     for(let i=0;i<obj.length;i++){
       if(obj[i]==operadores[2]||obj[i]==operadores[3]){
@@ -39,8 +40,14 @@ function resultado(obj){
         obj[i-1]=res;
       }          
     }
+    aux=0;
+    for(let i=0;i<obj.length;i++){
+      if(obj[i]==operadores[2]||obj[i]==operadores[3]){
+        aux++;
+      }
+    }
     console.log(obj);
-    if(obj.length>1){
+    if(obj.length>1&&aux==0){
       for(let i=0;i<obj.length;i++){
         if(obj[i]==operadores[0]||obj[i]==operadores[1]){
           let res;
